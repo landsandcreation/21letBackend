@@ -10,6 +10,7 @@ const ownerSchema = mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true
     },
     phone: {
       type: Number,
@@ -19,6 +20,13 @@ const ownerSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isVerified:{
+      type: String,
+      default: false
+    },
+    secretToken:{
+      type: String
+    }
   },
   {
     timestamps: true,

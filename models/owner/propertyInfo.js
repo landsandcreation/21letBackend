@@ -72,6 +72,19 @@ const propertySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    price: {
+      type: String,
+      required: [true, "Please enter a price"],
+    },
+    location: {
+      type: String,
+      required: [true, "Please enter a location"],
+    },
+    available: {
+      type: String,
+      required: true,
+      default: "Yes",
+    },
     otherDetails: {
       type: String,
     },

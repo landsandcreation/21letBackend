@@ -10,6 +10,7 @@ const travelerSchema = mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     phone: {
       type: Number,
@@ -18,6 +19,28 @@ const travelerSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    isVerified: {
+      type: String,
+      default: false,
+    },
+    secretToken: {
+      type: String,
+    },
+    placeOfResidence: {
+      type: String,
+    },
+    DOB: {
+      type: String,
+    },
+    gender: {
+      type: String,
+    },
+    filename: {
+      type: String,
+    },
+    secure_url: {
+      type: String,
     },
   },
   {
