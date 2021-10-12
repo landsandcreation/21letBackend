@@ -17,7 +17,7 @@ const requireAuth = (req, res, next) => {
       next();
     });
   } else {
-    // req.flash("error", "Log in first");
+    res.status(406).json("Log in first");
     // res.redirect("/users/login");
   }
 };

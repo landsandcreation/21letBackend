@@ -30,15 +30,15 @@ const ownerSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  } 
 );
 
 //Method to hash the password
-ownerSchema.pre("save", async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// ownerSchema.pre("save", async function (next) {
+//   const salt = await bcrypt.genSalt();
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
 const Owner = mongoose.model("owner", ownerSchema);
 

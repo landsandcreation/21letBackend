@@ -20,11 +20,14 @@ module.exports.signup = async (req, res) => {
     if (existingOwner) return res.status(406).json("Owner Already exists");
 
     const SecretToken = randomString.generate({
-      charset: numeric,
+      charset: "numeric",
       length: 7,
     });
 
-    //If Owner does not exist, save Owner 😉
+    
+    
+
+    // If Owner does not exist, save Owner 😉
     const result = await Owner.create({
       email,
       phone,
@@ -53,7 +56,11 @@ module.exports.signup = async (req, res) => {
       });
     });
 
-    res.status(200).json({result});
+    res.status(200).json('User Created');
+
+
+    
+    
   } catch (err) {
     res.status(500).json({error: err});
     console.log(err);
@@ -72,12 +79,12 @@ module.exports.verifyAccount = async (req, res, next) => {
     if (!owner)
       return res
         .status(406)
-        .json({message: "Owner does not exist, verify token or Sign up"});
+        .json({message: "Owner does not exist, verify token is correct or Sign up"});
 
     if (owner.isVerified == true)
       return res
         .status(406)
-        .json({message: "Account already verified, Please log in"});
+        .json("Account already verified, Please log in");
 
     //if token exists 😏
 
@@ -99,43 +106,41 @@ module.exports.verifyAccount = async (req, res, next) => {
 // ============= SIGN-IN CONTROLLER =================
 module.exports.signin = async (req, res) => {
   let {email, password} = req.body;
-
+  
   try {
     //check if Owner exists 😑
     const OwnerExists = await Owner.findOne({email});
-
+       
     if (!OwnerExists)
-      return res.status(406).json({message: "Incorrect Username or Password"});
+      return res.status(406).json({message: "notfound"});
 
     //check if password is correct 😒
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      OwnerExists.password
-    );
-
-    if (!isPasswordCorrect)
-      return res.status(406).json({message: "Incorrect Username or Password"});
-
-    if (isPasswordCorrect) {
+    
+    if(OwnerExists.password == password){
       if (OwnerExists.isVerified === "true") {
-        const token = jwt.sign(
+        const jwtToken = jwt.sign(
           {email: OwnerExists.email, id: OwnerExists._id},
           process.env.JWT_SECRET,
           {expiresIn: maxAge}
         );
 
-        res.cookie("jwt", token, {httpOnly: true});
-        res.status(200).json({result: OwnerExists, token});
+        req.header("jwt", jwtToken, {httpOnly: true});
+        res.status(200).json({name: OwnerExists.name,email: OwnerExists.email,phone: OwnerExists.phone, jwtToken});
       } else {
         return res
           .status(401)
-          .json("Your Email is not verified, Please verify");
+          .json({message:"Your Email is not verified, Please verify"});
       }
+    }else{
+      return res.status(406).json({message: 'Incorect Email or Password'});
+
     }
   } catch (error) {
-    res.status(500).json({message: "Incorrect Username or Password"});
+    res.status(500).json(error);
+    console.log(error)
   }
 };
+
 
 // ========================== FORGOT PASSWORD ========================
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   signup,
   signin,
+
   verifyAccount,
   forgotPassword,
   checkPasswordResetToken,
